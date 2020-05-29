@@ -11,12 +11,6 @@ mixin PlayerObserver {
     eventChannel.receiveBroadcastStream().listen(_processEvent);
   }
 
-  Future<void> listenForAudioPlayerEvents() async {
-    EventChannel eventChannel =
-        EventChannel("tv.mta/NativeAudioEventChannel", JSONMethodCodec());
-    eventChannel.receiveBroadcastStream().listen(_processEvent);
-  }
-
   /// Override this method to get notifications when media is paused.
   void onPause() {/* user implementation */}
 
