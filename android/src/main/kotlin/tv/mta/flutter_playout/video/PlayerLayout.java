@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -70,6 +71,10 @@ public class PlayerLayout extends PlayerView implements FlutterAVPlayer, EventCh
     SimpleExoPlayer mPlayerView;
     boolean isBound = true;
     private PlayerLayout instance;
+    /**
+     * WakeLock
+     */
+    private PowerManager.WakeLock wakeLock;
     /**
      * The underlying {@link MediaSessionCompat}.
      */
@@ -234,7 +239,28 @@ public class PlayerLayout extends PlayerView implements FlutterAVPlayer, EventCh
         setupMediaSession();
 
         doBindMediaNotificationManagerService();
+        
+        /*
+        PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+        */
     }
+    
+    /*
+    private void acquireWakeLock() {
+        if (!wakeLock.isHeld()){
+            Log.w(TAG, "acquireWakeLock");
+            wakeLock.acquire();
+        }
+	}
+
+	private void releaseWakeLock() {
+        if (wakeLock.isHeld()){
+            Log.w(TAG, "releaseWakeLock");
+            wakeLock.release();
+        }
+    }
+    */
 
     private void setupMediaSession() {
 
@@ -367,14 +393,14 @@ public class PlayerLayout extends PlayerView implements FlutterAVPlayer, EventCh
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        CharSequence channelNameDisplayedToUser = "Notification Bar Controls";
+        CharSequence channelNameDisplayedToUser = "TV Player";
 
         int importance = NotificationManager.IMPORTANCE_LOW;
 
         NotificationChannel newChannel = new NotificationChannel(
                 mNotificationChannelId, channelNameDisplayedToUser, importance);
 
-        newChannel.setDescription("All notifications");
+        newChannel.setDescription("Barra de notificações");
 
         newChannel.setShowBadge(false);
 
